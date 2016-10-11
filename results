@@ -1,0 +1,70 @@
+**********start***************
+training data percent : 30.0
+current # of training positive count 6
+current # of training negative count 12
+..*.*
+optimization finished, #iter = 63
+nu = 0.031338
+obj = -0.281991, rho = -0.137652
+nSV = 14, nBSV = 0
+Total nSV = 14
+current # of test positive count 16
+current # of test negative count 28
+Accuracy = 86.3636% (38/44) (classification)
+=================================
+**********start***************
+training data percent : 40.0
+current # of training positive count 8
+current # of training negative count 16
+..*
+optimization finished, #iter = 67
+nu = 0.026855
+obj = -0.322235, rho = -0.089496
+nSV = 17, nBSV = 0
+Total nSV = 17
+current # of test positive count 14
+current # of test negative count 24
+Accuracy = 92.1053% (35/38) (classification)
+=================================
+**********start***************
+training data percent : 50.0
+current # of training positive count 11
+current # of training negative count 20
+.*.*
+optimization finished, #iter = 85
+nu = 0.022838
+obj = -0.353960, rho = -0.199428
+nSV = 20, nBSV = 0
+Total nSV = 20
+current # of test positive count 11
+current # of test negative count 20
+Accuracy = 83.871% (26/31) (classification)
+=================================
+**********start***************
+training data percent : 60.0
+current # of training positive count 13
+current # of training negative count 24
+..*..*
+optimization finished, #iter = 156
+nu = 0.020535
+obj = -0.379868, rho = -0.691393
+nSV = 23, nBSV = 0
+Total nSV = 23
+current # of test positive count 9
+current # of test negative count 16
+Accuracy = 84% (21/25) (classification)
+=================================
+**********start***************
+training data percent : 70.0
+current # of training positive count 15
+current # of training negative count 28
+.*..*
+optimization finished, #iter = 133
+nu = 0.018876
+obj = -0.405774, rho = -0.641658
+nSV = 25, nBSV = 0
+Total nSV = 25
+current # of test positive count 7
+current # of test negative count 12
+Accuracy = 73.6842% (14/19) (classification)
+=================================
