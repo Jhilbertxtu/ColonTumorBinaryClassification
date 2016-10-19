@@ -24,14 +24,15 @@ def findMinMax(ipath):
             tokens=line.split(',')
             if(count==0):
                 for i in range(0,2000):
-                    min_array[i]=float(tokens[i]);
-                    max_array[i]=float(tokens[i]);
+                    min_array[i]=float(tokens[i].replace('\n',''));
+                    max_array[i]=float(tokens[i].replace('\n',''));
                 count=count+1;
             else:
                 for i in range(0,2000):
-                    cur_Val=float(tokens[i])
+                    cur_Val=float(tokens[i].replace('\n',''))
                     if(min_array[i]>cur_Val):min_array[i]=cur_Val;
                     if(max_array[i]<cur_Val):max_array[i]=cur_Val;
+
 
 def prepareData2(ipath):
     pos_co=0;
@@ -39,7 +40,7 @@ def prepareData2(ipath):
     with open(ipath,'r') as fp:
         for line in fp:
             tokens=line.split(',');
-            tok2000=tokens[2000].strip();
+            tok2000=tokens[2000].strip().replace('\n','');
             if(tok2000=='positive'):
                 addToArray(pos_co,tokens,'pos')
                 pos_co=pos_co+1
@@ -82,8 +83,8 @@ def generateRandomInstances(percent):
     neg_train_count=int(40*percent)
     rand_pos_train=random.sample(range(0,22),pos_train_count)
     rand_neg_train=random.sample(range(0,40),neg_train_count)
-    rand_pos_test=set(range(0,22))-set(rand_pos_train)
-    rand_neg_test=set(range(0,40))-set(rand_neg_train)
+    rand_pos_test=(set(range(0,22))-set(rand_pos_train))
+    rand_neg_test=(set(range(0,40))-set(rand_neg_train))
     return rand_pos_train,rand_neg_train,rand_pos_test,rand_neg_test
 
 
@@ -92,7 +93,7 @@ def getNeighbors(trX,teX, k):
 	for x in range(len(trX)):
 		dist = euclideanDistance(teX, trX[x])
 		distances.append(dist)
-	distances.sort(key=operator.itemgetter(1))
+	distances.sort()
 	neighbors = []
 	for x in range(k):
 		neighbors.append(distances[x])
@@ -104,14 +105,14 @@ def classify(rand_pos_train,rand_neg_train,rand_pos_test,rand_neg_test,percent,v
         pos_k=5
         neg_k=5
     pos_labels=[]
-    pos_test_samples=pos_X[rand_pos_test]
+    pos_test_samples=[pos_X[i] for i in rand_pos_test]
     for pos_sample in pos_test_samples:
         pos_neighbors=getNeighbors(pos_X[rand_pos_train],pos_sample,pos_k)
         neg_neighbors=getNeighbors(neg_X[rand_neg_train],pos_sample,neg_k)
         pos_labels.append(calcLabel(pos_neighbors,neg_neighbors))
 
     neg_labels=[]
-    neg_test_samples=neg_X[rand_neg_test]
+    neg_test_samples=[neg_X[i] for i in rand_neg_test]
     for neg_sample in neg_test_samples:
         pos_neighbors=getNeighbors(pos_X[rand_pos_train],neg_sample,pos_k)
         neg_neighbors=getNeighbors(neg_X[rand_neg_train],neg_sample,neg_k)
@@ -131,9 +132,9 @@ def calcLabel(pos_neighbors,neg_neighbors):
     for neighbor in neg_neighbors:
         neg_dist+=neighbor
     neg_dist=neg_dist/neg_k;
-    if(pos_dist>neg_dist):
+    if(pos_dist<neg_dist):
         return 0
-    elif(pos_dist<neg_dist):
+    elif(pos_dist>neg_dist):
         return 1
     else: return 1 #prior belif
 
@@ -163,9 +164,11 @@ def NN():
         pos_labels,neg_labels=classify(rand_pos_train,rand_neg_train,rand_pos_test,rand_neg_test,percent,0)
         pos_labels=np.asarray(pos_labels)
         neg_labels=np.asarray(neg_labels)
-        pred_labels=np.concatenate(pos_labels,neg_labels)
-        actual_labels=np.concatenate(pos_Y,neg_Y)
-        print "for "+percent*100+"% training data, accuracy is : " +str(getAccuracy(actual_labels,pred_labels))
+        pred_labels=np.concatenate([pos_labels,neg_labels],axis=0)
+        curr_pos_y=[pos_Y[i] for i in rand_pos_test]
+        curr_neg_y=[neg_Y[i] for i in rand_neg_test]
+        actual_labels=np.concatenate([curr_pos_y,curr_neg_y],axis=0)
+        print "for "+str(percent*100)+"% training data, accuracy is : " +str(getAccuracy(actual_labels,pred_labels))
 
 
 
