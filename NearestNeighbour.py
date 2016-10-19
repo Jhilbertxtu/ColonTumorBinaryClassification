@@ -142,7 +142,7 @@ def calcLabel(pos_neighbors,neg_neighbors):
 def getAccuracy(testSet, predictions):
 	correct = 0
 	for x in range(len(testSet)):
-		if testSet[x] is predictions[x]:
+		if int(testSet[x]) is int(predictions[x]):
 			correct += 1
 	return (correct/float(len(testSet))) * 100.0
 
@@ -159,17 +159,31 @@ def NN():
     findMinMax(ipath);
     prepareData2(ipath);
     percents=[0.3,0.4,0.5,0.6]
+    print "with random K value : \n"
+    #print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    for percent in percents:
+        rand_pos_train,rand_neg_train,rand_pos_test,rand_neg_test=generateRandomInstances(percent)
+        pos_labels,neg_labels=classify(rand_pos_train,rand_neg_train,rand_pos_test,rand_neg_test,percent,1)
+        pos_labels=np.asarray(pos_labels)
+        neg_labels=np.asarray(neg_labels)
+        pred_labels=np.concatenate([pos_labels,neg_labels],axis=0)
+        curr_pos_y=np.zeros(len(rand_pos_test))
+        curr_neg_y=np.ones(len(rand_neg_test))
+        actual_labels=np.concatenate([curr_pos_y,curr_neg_y],axis=0)
+        print "for "+str(percent*100)+"% training data, accuracy is : " +str(getAccuracy(actual_labels,pred_labels))
+    print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    print "with fixed k value : \n"
+    #print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
     for percent in percents:
         rand_pos_train,rand_neg_train,rand_pos_test,rand_neg_test=generateRandomInstances(percent)
         pos_labels,neg_labels=classify(rand_pos_train,rand_neg_train,rand_pos_test,rand_neg_test,percent,0)
         pos_labels=np.asarray(pos_labels)
         neg_labels=np.asarray(neg_labels)
         pred_labels=np.concatenate([pos_labels,neg_labels],axis=0)
-        curr_pos_y=[pos_Y[i] for i in rand_pos_test]
-        curr_neg_y=[neg_Y[i] for i in rand_neg_test]
+        curr_pos_y=np.zeros(len(rand_pos_test))
+        curr_neg_y=np.ones(len(rand_neg_test))
         actual_labels=np.concatenate([curr_pos_y,curr_neg_y],axis=0)
         print "for "+str(percent*100)+"% training data, accuracy is : " +str(getAccuracy(actual_labels,pred_labels))
-
 
 
 
